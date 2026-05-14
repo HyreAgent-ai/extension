@@ -1,0 +1,77 @@
+# HyreAgent.ai — standard .gitignore for Node/TypeScript repos (webapp, extension, platform, infrastructure)
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.pnp.cjs
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.log
+.yarn/install-state.gz
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+.vercel/
+.netlify/
+*.tsbuildinfo
+.tscache/
+
+# Testing
+coverage/
+*.lcov
+.nyc_output/
+.vitest-cache/
+junit.xml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Environment & secrets (NEVER commit)
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Cache
+.eslintcache
+.parcel-cache
+.cache/
+.npm/
+
+# Misc
+*.tmp
+.staging/
