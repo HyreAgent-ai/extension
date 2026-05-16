@@ -1,0 +1,21 @@
+name: Extension CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate manifest.json
+        run: |
+          python3 -c "import json; json.load(open('manifest.json'))"
+          echo "manifest.json valid"
+      - name: Install web-ext
+        run: npm install -g web-ext@7
+      - name: Run web-ext lint
+        run: web-ext lint --warnings-as-errors
