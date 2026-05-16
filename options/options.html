@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobAgent — Profile Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      font-size: 14px;
+      color: #111827;
+      background: #f9fafb;
+    }
+    h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .subtitle { color: #6b7280; font-size: 13px; margin-bottom: 28px; }
+    h2 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6b7280;
+      margin: 24px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; margin-bottom: 4px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    label { font-size: 12px; font-weight: 600; color: #374151; }
+    label .required { color: #dc2626; }
+    input, select, textarea {
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      color: #111827;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #6d28d9;
+    }
+    textarea { resize: vertical; }
+    .mono { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; }
+    small { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+    .btn-row { display: flex; gap: 10px; margin-top: 24px; align-items: center; }
+    #btn-save {
+      padding: 10px 24px;
+      background: #6d28d9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    #btn-save:hover { background: #5b21b6; }
+    #save-status { font-size: 12px; color: #15803d; }
+  </style>
+</head>
+<body>
+  <h1>🧩 JobAgent — Profile Settings</h1>
+  <p class="subtitle">Stored locally in your browser. Never sent to any server except when filling forms.</p>
+
+  <div class="card">
+    <h2>Personal Info</h2>
+    <div class="row">
+      <div class="field"><label>First Name</label><input id="firstName" placeholder="Jashwanth"></div>
+      <div class="field"><label>Last Name</label><input id="lastName" placeholder="—"></div>
+    </div>
+    <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@email.com"></div>
+    <div class="field"><label>Phone</label><input id="phone" type="tel" placeholder="+1 (xxx) xxx-xxxx"></div>
+    <div class="field"><label>LinkedIn URL</label><input id="linkedinUrl" placeholder="https://linkedin.com/in/..."></div>
+    <div class="row">
+      <div class="field"><label>City</label><input id="city" placeholder="Champaign"></div>
+      <div class="field"><label>State</label><input id="state" placeholder="IL"></div>
+    </div>
+
+    <h2>Work Authorization</h2>
+    <div class="field">
+      <label>Visa Status</label>
+      <input id="visaStatus" placeholder="F-1 OPT STEM">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Authorized to work in US?</label>
+        <select id="workAuth">
+          <option value="authorized">Yes</option>
+          <option value="not_authorized">No</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Require sponsorship?</label>
+        <select id="needsSponsorship">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+    </div>
+
+    <h2>Resume Content <span style="color:#dc2626;font-size:10px;vertical-align:middle;">required for PDF generation</span></h2>
+    <div class="field">
+      <label>Resume Summary <span class="required">*</span></label>
+      <textarea id="summary" rows="4" placeholder="Mechanical engineer with 3+ years experience in propulsion systems, structures, and rapid prototyping..."></textarea>
+      <small>Plain text — injected into your resume at %%SUMMARY%% in the LaTeX template</small>
+    </div>
+    <div class="field">
+      <label>Skills Block (LaTeX) <span class="required">*</span></label>
+      <textarea id="skills_latex" rows="6" class="mono" placeholder="\textbf{CAD/CAM:} SolidWorks, CATIA V5, ANSYS \\ \textbf{Programming:} Python, MATLAB \\"></textarea>
+      <small>Raw LaTeX content between %%SKILLS_BLOCK_START%% and %%SKILLS_BLOCK_END%% in your template</small>
+    </div>
+
+    <h2>Service URLs</h2>
+    <div class="field">
+      <label>Railway Compiler URL</label>
+      <input id="railwayUrl" class="mono" placeholder="https://resume-compiler-production.up.railway.app">
+    </div>
+  </div>
+
+  <h2>Connection</h2>
+  <div class="card">
+    <p id="auth-status" style="font-size:13px;color:#6b7280;margin-bottom:12px;">Checking sign-in status…</p>
+    <button id="btn-connect" style="padding:8px 16px;background:#7c3aed;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">Connect to HyreAgent</button>
+    <button id="btn-signout" style="display:none;padding:8px 16px;background:#fff;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-left:8px;">Sign out</button>
+  </div>
+
+  <div class="btn-row">
+    <button id="btn-save">Save Profile</button>
+    <span id="save-status"></span>
+  </div>
+
+  <script src="../lib/session.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobAgent</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <span class="logo">🧩 JobAgent</span>
+      <span id="ats-badge"></span>
+    </div>
+    <div id="content">
+      <div id="loading">Loading pipeline...</div>
+      <div id="no-match" style="display:none">No pipeline job matched for this page.</div>
+      <div id="auth-broken-banner" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px;margin-bottom:12px;font-size:13px;color:#991b1b;line-height:1.4">
+        <strong>Mark Applied isn't working right now.</strong>
+        <p style="margin:6px 0 0;">The extension can't save to your account due to a known issue (being fixed in the next release).</p>
+        <p style="margin:8px 0 0;">
+          <a href="#" id="manual-log-link" style="color:#7c3aed;font-weight:600;text-decoration:underline">Log this application manually →</a>
+        </p>
+      </div>
+      <div id="no-session-banner" style="display:none;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:12px;margin-bottom:12px;font-size:13px;color:#92400e;line-height:1.4">
+        <strong>Not signed in.</strong>
+        <p style="margin:6px 0 0;">Click below to connect this extension to your HyreAgent account.</p>
+        <p style="margin:8px 0 0;">
+          <a href="#" id="connect-link" style="color:#7c3aed;font-weight:600;text-decoration:underline">Connect to HyreAgent →</a>
+        </p>
+      </div>
+      <div id="job-card" style="display:none">
+        <div id="job-role"></div>
+        <div id="job-company"></div>
+        <div id="job-meta"></div>
+        <div id="variant-picker" style="display:none">
+          <label>Resume variant:</label>
+          <select id="variant-select">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+        <button id="btn-fill" disabled>⚡ Auto-fill Application</button>
+        <div id="fill-status"></div>
+      </div>
+    </div>
+    <div id="footer">
+      <a id="btn-options" href="#">⚙ Profile Settings</a>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 320px;
+  min-height: 200px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #1e1e2e;
+  color: #fff;
+}
+
+.logo { font-weight: 700; font-size: 14px; }
+
+#ats-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #374151;
+  color: #9ca3af;
+}
+
+#ats-badge.greenhouse { background: #dcfce7; color: #15803d; }
+#ats-badge.lever { background: #dbeafe; color: #1d4ed8; }
+#ats-badge.unknown { background: #fef3c7; color: #92400e; }
+
+#content { padding: 14px; }
+
+#loading, #no-match {
+  color: #6b7280;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+#job-card { display: flex; flex-direction: column; gap: 8px; }
+
+#job-role { font-weight: 700; font-size: 14px; }
+#job-company { color: #6b7280; font-size: 12px; }
+#job-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+#variant-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+#variant-picker select {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+#btn-fill {
+  width: 100%;
+  padding: 10px;
+  background: #6d28d9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+#btn-fill:disabled { background: #c4b5fd; cursor: not-allowed; }
+#btn-fill:hover:not(:disabled) { background: #5b21b6; }
+
+#fill-status { font-size: 11px; color: #6b7280; min-height: 16px; }
+
+#footer {
+  padding: 10px 14px;
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
+}
+
+#footer a {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+#footer a:hover { color: #374151; }
