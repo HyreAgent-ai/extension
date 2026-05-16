@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "JobAgent Auto-Apply",
+  "version": "2.0.0",
+  "description": "Auto-fill job applications from your JobAgent pipeline",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0zI0DPIjIyhIf633xIXjpR8ffDkbKOczkivLyazUDDaXJxPXlmOwykf6nDPO6ir28l6NFnV+C33KyO2+O9gOy79FQYp3pTV4zhmSngICChxxvNRd1bWqvtx8lZIj91jgLHRlTfLw7AAeQEffhpm3IttftQ6KVbeUd4XFeen6mZx6rkt0TsTzYK/AwPC4XS7FhzjAn4BKvPEk8mJqHfdLl4aWm4V4R/mwBN59z7U4ZZF+qD4hhDCIRbMgVYSzANf8AnRV7JS1Thn9FZiiGbIw1Lg0QMdBKg7C4YQpSbdeaFV2UMrDYxCCOGlNkGTqJFHmjJI4ubROc5jiAk0TyYSXAwIDAQAB",
+  "permissions": ["storage", "tabs", "scripting", "activeTab"],
+  "host_permissions": [
+    "https://boards.greenhouse.io/*",
+    "https://job-boards.greenhouse.io/*",
+    "https://*.greenhouse.io/*",
+    "https://jobs.lever.co/*",
+    "https://*.lever.co/*",
+    "https://jobagent-web.vercel.app/*",
+    "https://resume-compiler-1077806152183.us-central1.run.app/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "JobAgent Auto-Apply"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://boards.greenhouse.io/*",
+        "https://job-boards.greenhouse.io/*",
+        "https://*.greenhouse.io/*",
+        "https://jobs.lever.co/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "externally_connectable": {
+    "matches": [
+      "https://jobagent-web.vercel.app/*"
+    ]
+  }
+}
