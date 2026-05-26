@@ -61,13 +61,21 @@ function setBadge(ats) {
 
 // --- Main ---
 document.addEventListener('DOMContentLoaded', async () => {
-  // Listen for Mark Applied failure from content script via background
+  // Listen for Mark Applied failure from content script via background (RELI-16)
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === 'MARK_APPLIED_FAILED') {
       if (msg.code === 'NO_SESSION') {
         $id('no-session-banner').style.display = '';
       } else if (msg.code === 'EXTENSION_AUTH_BROKEN') {
         $id('auth-broken-banner').style.display = '';
+      } else {
+        // Generic fallback: show error banner with the raw error code so the user
+        // knows the save failed even when we don't have a specific recovery flow.
+        const detail = $id('mark-applied-error-detail');
+        if (detail) {
+          detail.textContent = `The application may not have been recorded (code: ${msg.code || 'UNKNOWN'}). Please log it manually.`;
+        }
+        $id('mark-applied-error-banner').style.display = '';
       }
     }
   });
@@ -80,6 +88,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Wire recovery link — shown when Mark Applied is known-broken (RELI-17)
   $id('manual-log-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    const role = encodeURIComponent(window._currentJob?.role || '');
+    const company = encodeURIComponent(window._currentJob?.company || '');
+    const url = `https://jobagent-web.vercel.app/applied?prefill_role=${role}&prefill_company=${company}`;
+    chrome.tabs.create({ url, active: true });
+  });
+
+  // Wire fallback recovery link — shown for generic MARK_APPLIED errors (RELI-16)
+  $id('manual-log-link-fallback').addEventListener('click', (e) => {
     e.preventDefault();
     const role = encodeURIComponent(window._currentJob?.role || '');
     const company = encodeURIComponent(window._currentJob?.company || '');
