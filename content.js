@@ -5,7 +5,11 @@ const PROFILE_KEY = 'jobagent_profile';
 
 // ── DOM construction helper ───────────────────────────────────────────────────
 // Builds elements safely — user data is always set as textContent, never
-// interpolated into HTML strings, eliminating XSS risk (SEC-06).
+// interpolated into HTML strings, eliminating XSS risk (SEC-06 / RELI-18).
+// RELI-18 audit (2026-05-25): zero innerHTML / outerHTML / insertAdjacentHTML /
+// document.write occurrences confirmed across content.js, popup/popup.js,
+// popup/popup.html, options/options.js, background.js, lib/*.js, adapters/*.js.
+// This helper is the canonical safe DOM API for all dynamic content creation.
 
 function el(tag, attrs, ...children) {
   const e = document.createElement(tag);
