@@ -38,5 +38,8 @@
     "matches": [
       "https://jobagent-web.vercel.app/*"
     ]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"
   }
 }

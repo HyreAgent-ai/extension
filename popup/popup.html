@@ -29,6 +29,14 @@
           <a href="#" id="connect-link" style="color:#7c3aed;font-weight:600;text-decoration:underline">Connect to HyreAgent →</a>
         </p>
       </div>
+      <!-- RELI-16: generic fallback banner for MARK_APPLIED errors not covered by specific banners -->
+      <div id="mark-applied-error-banner" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px;margin-bottom:12px;font-size:13px;color:#991b1b;line-height:1.4">
+        <strong>Failed to save application.</strong>
+        <p id="mark-applied-error-detail" style="margin:6px 0 0;">The application may not have been recorded. Please log it manually.</p>
+        <p style="margin:8px 0 0;">
+          <a href="#" id="manual-log-link-fallback" style="color:#7c3aed;font-weight:600;text-decoration:underline">Log this application manually →</a>
+        </p>
+      </div>
       <div id="job-card" style="display:none">
         <div id="job-role"></div>
         <div id="job-company"></div>

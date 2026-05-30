@@ -5,7 +5,11 @@ const PROFILE_KEY = 'jobagent_profile';
 
 // ── DOM construction helper ───────────────────────────────────────────────────
 // Builds elements safely — user data is always set as textContent, never
-// interpolated into HTML strings, eliminating XSS risk (SEC-06).
+// interpolated into HTML strings, eliminating XSS risk (SEC-06 / RELI-18).
+// RELI-18 audit (2026-05-25): zero innerHTML / outerHTML / insertAdjacentHTML /
+// document.write occurrences confirmed across content.js, popup/popup.js,
+// popup/popup.html, options/options.js, background.js, lib/*.js, adapters/*.js.
+// This helper is the canonical safe DOM API for all dynamic content creation.
 
 function el(tag, attrs, ...children) {
   const e = document.createElement(tag);
@@ -294,8 +298,11 @@ function showOverlay(filled, flagged, job, variant) {
         job,
         resumeVariant: variant,
       });
-      if (!markRes?.ok && markRes?.code === 'EXTENSION_AUTH_BROKEN') {
-        // Show error in overlay — replace success content using DOM API (SEC-06)
+      if (!markRes?.ok) {
+        // RELI-16: surface all MARK_APPLIED failures — previously non-AUTH_BROKEN errors
+        // were swallowed here and the overlay dismissed silently after 3 s.
+        const failCode = markRes?.code || 'UNKNOWN';
+
         // job.role and job.company go into the href via encodeURIComponent, not raw HTML
         const manualUrl = 'https://jobagent-web.vercel.app/applied'
           + '?prefill_role=' + encodeURIComponent(job.role)
@@ -306,9 +313,19 @@ function showOverlay(filled, flagged, job, variant) {
           style: { width: '100%', padding: '6px', background: 'transparent', border: '1px solid #e5e7eb', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', color: '#6b7280', fontFamily: 'inherit' },
         }, 'Dismiss');
 
+        // Build a human-readable reason line based on the error code
+        let reasonText;
+        if (failCode === 'EXTENSION_AUTH_BROKEN') {
+          reasonText = 'couldn\'t be saved to your account due to a known issue.';
+        } else if (failCode === 'NO_SESSION') {
+          reasonText = 'couldn\'t be saved — the extension is not connected to your account.';
+        } else {
+          reasonText = `couldn\'t be saved (${markRes?.error || failCode}).`;
+        }
+
         const p1 = el('p', { style: { margin: '0 0 8px' } }, 'The application was submitted but ');
         p1.appendChild(el('strong', {}, 'couldn\'t be saved'));
-        p1.appendChild(document.createTextNode(' to your account due to a known issue.'));
+        p1.appendChild(document.createTextNode(' — ' + reasonText));
 
         const logLink = el('a', {
           href: manualUrl,
@@ -326,8 +343,8 @@ function showOverlay(filled, flagged, job, variant) {
           ),
         );
         errCloseBtn.onclick = () => overlay.remove();
-        // Also notify popup to show the banner
-        chrome.runtime.sendMessage({ type: 'MARK_APPLIED_FAILED', code: 'EXTENSION_AUTH_BROKEN' });
+        // Notify popup so it can show the appropriate banner for the error code
+        chrome.runtime.sendMessage({ type: 'MARK_APPLIED_FAILED', code: failCode });
       } else {
         setTimeout(() => overlay.remove(), 3000);
       }
